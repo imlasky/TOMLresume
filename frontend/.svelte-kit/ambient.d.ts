@@ -26,6 +26,7 @@
  * ```
  */
 declare module '$env/static/private' {
+	export const PRIVATE_SERVER_ADDRESS: string;
 	export const NVM_INC: string;
 	export const NVM_RC_VERSION: string;
 	export const TERM_PROGRAM: string;
@@ -37,7 +38,6 @@ declare module '$env/static/private' {
 	export const TMPDIR: string;
 	export const npm_config_global_prefix: string;
 	export const TERM_PROGRAM_VERSION: string;
-	export const npm_package_optional: string;
 	export const COLOR: string;
 	export const TERM_SESSION_ID: string;
 	export const npm_config_noproxy: string;
@@ -45,11 +45,10 @@ declare module '$env/static/private' {
 	export const NVM_DIR: string;
 	export const USER: string;
 	export const npm_config_globalconfig: string;
-	export const npm_package_peer: string;
 	export const SSH_AUTH_SOCK: string;
 	export const __CF_USER_TEXT_ENCODING: string;
 	export const npm_execpath: string;
-	export const npm_package_integrity: string;
+	export const VIRTUAL_ENV: string;
 	export const PATH: string;
 	export const npm_package_json: string;
 	export const npm_config_engine_strict: string;
@@ -66,15 +65,11 @@ declare module '$env/static/private' {
 	export const LANG: string;
 	export const npm_config_npm_version: string;
 	export const XPC_FLAGS: string;
-	export const npm_package_engines_node: string;
 	export const npm_config_node_gyp: string;
-	export const npm_package_dev: string;
 	export const npm_package_version: string;
 	export const XPC_SERVICE_NAME: string;
-	export const npm_package_resolved: string;
 	export const HOME: string;
 	export const SHLVL: string;
-	export const npm_package_dev_optional: string;
 	export const npm_config_cache: string;
 	export const LOGNAME: string;
 	export const npm_lifecycle_script: string;
@@ -83,6 +78,7 @@ declare module '$env/static/private' {
 	export const SECURITYSESSIONID: string;
 	export const npm_node_execpath: string;
 	export const npm_config_prefix: string;
+	export const NODE_ENV: string;
 }
 
 /**
@@ -114,6 +110,7 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
+		PRIVATE_SERVER_ADDRESS: string;
 		NVM_INC: string;
 		NVM_RC_VERSION: string;
 		TERM_PROGRAM: string;
@@ -125,7 +122,6 @@ declare module '$env/dynamic/private' {
 		TMPDIR: string;
 		npm_config_global_prefix: string;
 		TERM_PROGRAM_VERSION: string;
-		npm_package_optional: string;
 		COLOR: string;
 		TERM_SESSION_ID: string;
 		npm_config_noproxy: string;
@@ -133,11 +129,10 @@ declare module '$env/dynamic/private' {
 		NVM_DIR: string;
 		USER: string;
 		npm_config_globalconfig: string;
-		npm_package_peer: string;
 		SSH_AUTH_SOCK: string;
 		__CF_USER_TEXT_ENCODING: string;
 		npm_execpath: string;
-		npm_package_integrity: string;
+		VIRTUAL_ENV: string;
 		PATH: string;
 		npm_package_json: string;
 		npm_config_engine_strict: string;
@@ -154,15 +149,11 @@ declare module '$env/dynamic/private' {
 		LANG: string;
 		npm_config_npm_version: string;
 		XPC_FLAGS: string;
-		npm_package_engines_node: string;
 		npm_config_node_gyp: string;
-		npm_package_dev: string;
 		npm_package_version: string;
 		XPC_SERVICE_NAME: string;
-		npm_package_resolved: string;
 		HOME: string;
 		SHLVL: string;
-		npm_package_dev_optional: string;
 		npm_config_cache: string;
 		LOGNAME: string;
 		npm_lifecycle_script: string;
@@ -171,6 +162,7 @@ declare module '$env/dynamic/private' {
 		SECURITYSESSIONID: string;
 		npm_node_execpath: string;
 		npm_config_prefix: string;
+		NODE_ENV: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}

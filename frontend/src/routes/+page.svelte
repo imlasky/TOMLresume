@@ -219,5 +219,6 @@ Made by <a href="https://lasky.io">Ian</a>. Need a tailored resume? Check out <a
 <style>
     textarea {
         width: 100%;
+        resize: vertical;
     }
 </style>

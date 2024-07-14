@@ -10,89 +10,125 @@ import os
 import io
 import json
 from fastapi.encoders import jsonable_encoder
+from datetime import date
+
 
 
 app = FastAPI()
 
-class TextArr(BaseModel):
-    texts: List[str]
+class Profile(BaseModel):
+    network: str
+    username: str
+    url: str
 
-class WorkHighlight(BaseModel):
-    highlight: str
-    index: Optional[int]
-
-class ProjectHighlight(BaseModel):
-    highlight: str
-
-class Work(BaseModel):
-    url: Optional[str]
-    city: Optional[str]
-    name: Optional[str]
-    country: Optional[str]
-    startDate: Optional[datetime]
-    endDate: Optional[datetime]
-    present: Optional[bool]
-    position: Optional[str]
-    work_highlights: List[WorkHighlight]
-    index: Optional[int]  
+class Location(BaseModel):
+    address: str
+    postalCode: str
+    city: str
+    countryCode: str
+    region: str
 
 class Basics(BaseModel):
-    name: Optional[str]
-    email: Optional[str]
-    phone: Optional[str]
-    city: Optional[str]
-    country: Optional[str]
-    website: Optional[str]
-    linkedin: Optional[str]
-    github: Optional[str]
+    name: str
+    label: str
+    email: str
+    phone: str
+    url: str
+    summary: str
+    location: Location
+    profiles: List[Profile]
 
-class Education(BaseModel):
-    institution: Optional[str]
-    degree: Optional[str]
-    startDate: Optional[datetime]
-    endDate: Optional[datetime]
-    present: bool
-    accolades: Optional[str]
-    GPA: Optional[str]
-    GPAScale: Optional[str]
+class WorkEntry(BaseModel):
+    name: str
+    position: str
+    url: str
+    startDate: date
+    endDate: Optional[date]
+    summary: str
+    highlights: List[str]
 
-class Skills(BaseModel):
-    name: Optional[str]
-    keywords: Optional[str]
+class VolunteerEntry(BaseModel):
+    organization: str
+    position: str
+    url: str
+    startDate: date
+    endDate: Optional[date]
+    summary: str
+    highlights: List[str]
 
-class Project(BaseModel):
-    name: Optional[str]
-    startDate: Optional[datetime]
-    endDate: Optional[datetime]
-    projects_highlights: List[ProjectHighlight] 
+class EducationEntry(BaseModel):
+    institution: str
+    url: str
+    area: str
+    studyType: str
+    startDate: date
+    endDate: date
+    score: str
+    courses: List[str]
+
+class AwardEntry(BaseModel):
+    title: str
+    date: date
+    awarder: str
+    summary: str
+
+class CertificateEntry(BaseModel):
+    name: str
+    date: date
+    issuer: str
+    url: str
+
+class PublicationEntry(BaseModel):
+    name: str
+    publisher: str
+    releaseDate: date
+    url: str
+    summary: str
+
+class SkillEntry(BaseModel):
+    name: str
+    level: str
+    keywords: List[str]
+
+class LanguageEntry(BaseModel):
+    language: str
+    fluency: str
+
+class InterestEntry(BaseModel):
+    name: str
+    keywords: List[str]
+
+class ReferenceEntry(BaseModel):
+    name: str
+    reference: str
+
+class ProjectEntry(BaseModel):
+    name: str
+    startDate: date
+    endDate: Optional[date]
+    description: str
+    highlights: List[str]
+    url: str
 
 class Resume(BaseModel):
     basics: Basics
-    work: List[Work] 
-    education: List[Education] 
-    skills: List[Skills]
-    projects: List[Project]
-
+    work: List[WorkEntry]
+    volunteer: List[VolunteerEntry]
+    education: List[EducationEntry]
+    awards: List[AwardEntry]
+    certificates: List[CertificateEntry]
+    publications: List[PublicationEntry]
+    skills: List[SkillEntry]
+    languages: List[LanguageEntry]
+    interests: List[InterestEntry]
+    references: List[ReferenceEntry]
+    projects: List[ProjectEntry]
 
 @app.post("/")
-def create_resume(resume: Resume):
-   
-    for work in resume.work:
-        if work.startDate:
-            work.startDate = work.startDate.strftime("%b, %Y")
-        if work.endDate:
-            work.endDate = work.endDate.strftime("%b, %Y")
-
-    for education in resume.education:
-        if education.startDate:
-            education.startDate = education.startDate.strftime("%b, %Y")
-        if education.endDate:
-            education.endDate = education.endDate.strftime("%b, %Y")
-
-
-    # Path to your Typst template file
+async def submit_resume(resume: Resume):
     template_path = os.path.abspath("./resume.typ")
-    fname = f'{resume.basics.first_name}_{resume.basics.last_name}_resume'
+    name_str = "_".join(resume.basics.name.split(' '))
+    fname = f'{name_str}_resume'
 
     output_filename = f"{fname}.pdf"
 
@@ -100,6 +136,7 @@ def create_resume(resume: Resume):
         # Prepare the Typst command
         typst_command = ["typst", "compile", template_path, output_filename]
         typst_command.extend(["--input", f"data={json.dumps(jsonable_encoder(resume))}"])
+
 
         # Run Typst
         result = subprocess.run(typst_command, capture_output=True, check=True)
@@ -120,3 +157,8 @@ def create_resume(resume: Resume):
     finally:
         # Clean up: remove the temporary output file
         os.unlink(output_filename)
+    return {"message": f"Resume for {resume.basics.name} received successfully"}
+
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Resume API"}
